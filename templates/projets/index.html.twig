@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Details du projet{% endblock %}
+
+{% block body %}
+<section id="modifier-hackathon" class="section">
+  <div class="container mt-5">
+    <h2 class="mb-4 text-center">Details du projet</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        {{ form_start(form) }}
+          <div class="mb-3">
+            {{ form_label(form.nom) }}
+            {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.nom) }}
+          </div>
+          <div class="mb-3">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.description) }}
+          </div>
+  
+       
+          <div class="mb-3">
+            {{ form_label(form.ressource) }}
+            {{ form_widget(form.ressource, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.ressource) }}
+          </div>
+          <div class="mb-3">
+            {{ form_label(form.technologies) }}
+            {{ form_widget(form.technologies, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.technologies) }}
+          </div>
+            <div class="mb-3">
+            {{ form_label(form.id_hack) }}
+            {{ form_widget(form.id_hack, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.id_hack) }}
+          </div>
+
+          <button type="submit" class="btn btn-success">Soummetre</button>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

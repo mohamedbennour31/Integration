@@ -1,0 +1,273 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ chat.nom }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .poll-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .progress {
+            background-color: #e9ecef;
+            border-radius: 0.25rem;
+        }
+        .progress-bar {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            font-size: 0.875rem;
+            line-height: 20px;
+            white-space: nowrap;
+        }
+        .badge-active {
+            background-color: #28a745;
+            color: white;
+        }
+        .badge-closed {
+            background-color: #6c757d;
+            color: white;
+        }
+        /* Add styles for the header */
+        .header {
+            background-color: #1b3347;
+            padding: 1rem 0;
+        }
+        .sitename {
+            color: white;
+            margin: 0 0 0 10px;
+        }
+        .navmenu ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .navmenu ul li {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        .navmenu ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .btn-getstarted {
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            border: 2px solid white;
+            border-radius: 50px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+   
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h1>{{ chat.nom }}</h1>
+                    <div>
+                        <a href="{{ path('app_chat_index') }}" class="btn btn-outline-secondary mb-2">
+                            <i class="fas fa-arrow-left"></i> Back to Chats
+                        </a>
+                        <a href="{{ path('app_communaute_show', {'id': chat.communaute_id.id}) }}" class="btn btn-outline-primary">
+                            <i class="fas fa-users"></i> Back to Community
+                        </a>
+                    </div>
+                </div>
+                <p class="text-muted">
+                    Type: {{ chat.type }} | Community: {{ chat.communaute_id.nom }}
+                </p>
+
+                <!-- Messages Section -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Messages</h5>
+                        <div class="messages-container" style="max-height: 400px; overflow-y: auto;">
+                            {% for message in chat.messages %}
+                                <div class="message mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>{{ message.posted_by.nom }} {{ message.posted_by.prenom }}</strong>
+                                        <small class="text-muted">{{ message.post_time|date('Y-m-d H:i') }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ message.contenu }}</p>
+                                    <small class="text-muted">Type: {{ message.type }}</small>
+                                </div>
+                            {% else %}
+                                <p>No messages yet.</p>
+                            {% endfor %}
+                        </div>
+
+                        <!-- New Message Form -->
+                        <form method="post" action="{{ path('app_chat_message_new', {'id': chat.id}) }}" class="mt-3">
+                            <div class="form-group">
+                                <textarea class="form-control" name="contenu" rows="2" placeholder="Type your message..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" name="type">
+                                    <option value="QUESTION">Question</option>
+                                    <option value="REPONSE">Response</option>
+                                    <option value="SUGGESTION">Suggestion</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <!-- Polls Section -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">Polls</h5>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createPollModal">
+                                <i class="fas fa-plus"></i> New Poll
+                            </button>
+                        </div>
+                        
+                        {% for poll in chat.polls %}
+                            <div class="poll-card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">{{ poll.question }}</h6>
+                                    {% if not poll.is_closed %}
+                                        <span class="badge badge-active">Active</span>
+                                    {% else %}
+                                        <span class="badge badge-closed">Closed</span>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <form method="post" action="{{ path('app_poll_vote', {'id': poll.id}) }}" class="poll-form" onsubmit="return validateVoteForm(this);">
+                                        <div class="poll-options">
+                                            {% for option in poll.poll_option %}
+                                                <div class="poll-option mb-3">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" 
+                                                                   name="option_id" 
+                                                                   value="{{ option.id }}" 
+                                                                   id="option{{ option.id }}"
+                                                                   required
+                                                                   {% if poll.is_closed %}disabled{% endif %}>
+                                                            <label class="form-check-label" for="option{{ option.id }}">
+                                                                {{ option.text }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="progress" style="height: 20px;">
+                                                        {% set total_votes = 0 %}
+                                                        {% for opt in poll.poll_option %}
+                                                            {% set total_votes = total_votes + opt.votes|length %}
+                                                        {% endfor %}
+                                                        {% set percentage = total_votes > 0 ? (option.votes|length / total_votes * 100)|round : 0 %}
+                                                        <div class="progress-bar" role="progressbar" 
+                                                             style="width: {{ percentage }}%;" 
+                                                             aria-valuenow="{{ percentage }}" 
+                                                             aria-valuemin="0" 
+                                                             aria-valuemax="100">
+                                                            {{ option.votes|length }} votes ({{ percentage }}%)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        
+                                        {% if not poll.is_closed %}
+                                            <div class="d-flex justify-content-between mt-3">
+                                                <button type="submit" class="btn btn-primary">Vote</button>
+                                                {% if is_granted('ROLE_USER') %}
+                                                    <form method="post" action="{{ path('app_poll_close', {'id': poll.id}) }}" class="d-inline">
+                                                        <button type="submit" class="btn btn-secondary">Close Poll</button>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            <p class="text-muted mt-2">This poll is closed</p>
+                                        {% endif %}
+                                    </form>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-center">No polls available</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Poll Modal -->
+    <div class="modal fade" id="createPollModal" tabindex="-1" aria-labelledby="createPollModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createPollModalLabel">Create New Poll</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{{ path('app_chat_poll_new', {'id': chat.id}) }}">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="question" class="form-label">Poll Question</label>
+                            <input type="text" class="form-control" id="question" name="question" required>
+                        </div>
+                        <div id="pollOptions" class="mb-3">
+                            <div class="mb-2">
+                                <label class="form-label">Option 1</label>
+                                <input type="text" class="form-control" name="options[]" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Option 2</label>
+                                <input type="text" class="form-control" name="options[]" required>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addOption()">
+                            <i class="fas fa-plus"></i> Add Option
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create Poll</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function validateVoteForm(form) {
+            const selectedOption = form.querySelector('input[name="option_id"]:checked');
+            if (!selectedOption) {
+                alert('Please select an option before voting.');
+                return false;
+            }
+            return true;
+        }
+
+        function addOption() {
+            const container = document.getElementById('pollOptions');
+            const optionCount = container.children.length + 1;
+            
+            const div = document.createElement('div');
+            div.className = 'mb-2';
+            div.innerHTML = `
+                <label class="form-label">Option ${optionCount}</label>
+                <input type="text" class="form-control" name="options[]" required>
+            `;
+            
+            container.appendChild(div);
+        }
+
+        // Initialize Bootstrap tooltips and popovers if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+{% endblock %} 

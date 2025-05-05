@@ -1,0 +1,14 @@
+twig:
+  default_path: "%kernel.project_dir%/templates"
+  form_themes:
+    - "bootstrap_5_layout.html.twig"
+    - "@KarserRecaptcha3/Form/karser_recaptcha3_widget.html.twig"
+  globals:
+    google_recaptcha_site_key: "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+    google_recaptcha2_site_key: "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+  paths:
+    "%kernel.project_dir%/public/FrontOffice/assets": assets
+
+when@test:
+  twig:
+    strict_variables: true

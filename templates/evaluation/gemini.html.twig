@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gemini AI Integration
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<h1 class="mb-4">Gemini AI Integration</h1>
+
+		<div class="card mb-4">
+			<div class="card-body">
+				<h5 class="card-title">Generate Content</h5>
+				<form id="geminiForm">
+					<div class="form-group">
+						<label for="prompt">Enter your prompt:</label>
+						<textarea class="form-control" id="prompt" rows="3" required></textarea>
+					</div>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Response</h5>
+				<div
+					id="response" class="p-3 bg-light rounded"><!-- Response will appear here -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		document.getElementById('geminiForm').addEventListener('submit', function (e) {
+e.preventDefault();
+const prompt = document.getElementById('prompt').value;
+
+fetch('{{ path('app_gemini') }}', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'X-Requested-With': 'XMLHttpRequest'
+},
+body: JSON.stringify(
+{prompt: prompt}
+)
+}).then(response => response.json()).then(data => {
+const responseDiv = document.getElementById('response');
+if (data.error) {
+responseDiv.innerHTML = `<div class="alert alert-danger">${
+data.error
+}</div>`;
+} else {
+responseDiv.innerHTML = `<div class="alert alert-success">${
+data.response
+}</div>`;
+}
+}).catch(error => {
+document.getElementById('response').innerHTML = `<div class="alert alert-danger">An error occurred: ${
+error.message
+}</div>`;
+});
+});
+	</script>
+{% endblock %}

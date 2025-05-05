@@ -1,0 +1,123 @@
+{% extends 'backoffice/baseback.html.twig' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .card {
+            border: none;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+        .card-header {
+            background: linear-gradient(135deg, #4B79A1, #283E51);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 1.5rem;
+        }
+        .form-control {
+            border-radius: 8px;
+            padding: 0.7rem 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e1e5eb;
+            box-shadow: none;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #4B79A1;
+            box-shadow: 0 0 0 0.2rem rgba(75, 121, 161, 0.25);
+        }
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        .btn-action {
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #4B79A1;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: #283E51;
+            transform: translateY(-2px);
+        }
+        .status-info {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #4B79A1;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">Edit User: {{ user.nomUser }} {{ user.prenomUser }}</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nomUser" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="nomUser" name="nomUser" value="{{ user.nomUser }}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="prenomUser" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="prenomUser" name="prenomUser" value="{{ user.prenomUser }}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="emailUser" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="emailUser" name="emailUser" value="{{ user.emailUser }}" required>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="telUser" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="telUser" name="telUser" value="{{ user.telUser }}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="adresseUser" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="adresseUser" name="adresseUser" value="{{ user.adresseUser }}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="statusUser" class="form-label">Status</label>
+                                <select class="form-select" id="statusUser" name="statusUser" required>
+                                    <option value="active" {% if user.statusUser == 'active' %}selected{% endif %}>Active</option>
+                                    <option value="inactive" {% if user.statusUser == 'inactive' %}selected{% endif %}>Inactive</option>
+                                </select>
+                                <div class="status-info mt-2">
+                                    <p class="mb-0"><strong>Active:</strong> User can login and access all features</p>
+                                    <p class="mb-0"><strong>Inactive:</strong> User is banned and cannot login to the platform</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between mt-4">
+                                <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary btn-action">
+                                    <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+                                </a>
+                                <button type="submit" class="btn btn-primary btn-action">
+                                    <i class="fas fa-save me-2"></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

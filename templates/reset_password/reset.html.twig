@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau mot de passe{% endblock %}
+
+{% block body %}
+<div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col-md-5">
+            <div class="card shadow-lg" style="border-radius: 1rem; border: none; background: linear-gradient(to right bottom, #ffffff, #f8f9fa);">
+                <div class="card-body p-5">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold mb-3" style="color: #1b3347;">Nouveau mot de passe</h2>
+                        <p class="text-muted">Veuillez choisir votre nouveau mot de passe</p>
+                    </div>
+
+                    {{ form_start(resetForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                        <div class="form-group mb-4">
+                            {{ form_row(resetForm.plainPassword.first, {
+                                'label': 'Nouveau mot de passe',
+                                'label_attr': {'class': 'form-label fw-semibold'},
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Entrez votre nouveau mot de passe'
+                                }
+                            }) }}
+                            {{ form_row(resetForm.plainPassword.second, {
+                                'label': 'Confirmez le mot de passe',
+                                'label_attr': {'class': 'form-label fw-semibold'},
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Confirmez votre nouveau mot de passe'
+                                }
+                            }) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-4 shadow-sm">
+                            <i class="bi bi-check2-circle me-2"></i>Confirmer le nouveau mot de passe
+                        </button>
+
+                        <div class="text-center">
+                            <p class="mb-0 text-muted">
+                                <a href="{{ path('app_login') }}" class="text-primary fw-semibold text-decoration-none">
+                                    <i class="bi bi-arrow-left me-1"></i>Retour à la connexion
+                                </a>
+                            </p>
+                        </div>
+                    {{ form_end(resetForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+$(document).ready(function() {
+    // Form validation
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    }
+});
+</script>
+{% endblock %}

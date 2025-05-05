@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5" style="min-height: 80vh;">
+    <div class="row justify-content-center">
+        <div class="col-md-8" data-aos="fade-up" data-aos-delay="100">
+            <div class="card shadow-lg" style="border-radius: 15px; border: none;">
+                <div class="card-header py-4" style="background: linear-gradient(135deg, #1b3347 0%, #1b3347 100%); border-radius: 15px 15px 0 0;">
+                    <h1 class="h3 mb-0 text-white">Modifier mon profil</h1>
+                    <p class="text-white-50 mb-0 mt-1">Mettez à jour vos informations personnelles</p>
+                </div>
+                <div class="card-body p-4">
+                    {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(form.nom_user, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    {{ form_widget(form.nom_user, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'required': 'required',
+                                            'maxlength': '50',
+                                            'placeholder': 'Votre nom'
+                                        }
+                                    }) }}
+                                </div>
+                                {{ form_errors(form.nom_user) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(form.prenom_user, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    {{ form_widget(form.prenom_user, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'required': 'required',
+                                            'maxlength': '50',
+                                            'placeholder': 'Votre prénom'
+                                        }
+                                    }) }}
+                                </div>
+                                {{ form_errors(form.prenom_user) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        {{ form_label(form.email_user, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            {{ form_widget(form.email_user, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'required': 'required',
+                                    'type': 'email',
+                                    'placeholder': 'votre.email@exemple.com'
+                                }
+                            }) }}
+                        </div>
+                        {{ form_errors(form.email_user) }}
+                    </div>
+
+                    <div class="form-group mt-3">
+                        {{ form_label(form.tel_user, 'Téléphone', {'label_attr': {'class': 'form-label'}}) }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-phone"></i></span>
+                            {{ form_widget(form.tel_user, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': '12345678'
+                                }
+                            }) }}
+                        </div>
+                        {{ form_errors(form.tel_user) }}
+                    </div>
+
+                    <div class="form-group mt-3">
+                        {{ form_label(form.adresse_user, 'Adresse', {'label_attr': {'class': 'form-label'}}) }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                            {{ form_widget(form.adresse_user, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'required': 'required',
+                                    'maxlength': '255',
+                                    'placeholder': 'Votre adresse complète'
+                                }
+                            }) }}
+                        </div>
+                        {{ form_errors(form.adresse_user) }}
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{{ path('app_profile_show') }}" class="btn btn-light">
+                            <i class="bi bi-arrow-left me-2"></i>Retour
+                        </a>
+                        <button class="btn" style="background-color: #1b3347; color: white;">
+                            <i class="bi bi-check2-circle me-2"></i>Enregistrer
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

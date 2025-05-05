@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Projets - {{ hackathon.nom_hackathon }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+  <h2>Projets au hackathon : {{ hackathon.nom_hackathon }}</h2>
+  
+  {% if projets is empty %}
+    <p>Aucun Projets pour le moment.</p>
+  {% else %}
+      <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Statut</th>
+          <th>Priorite</th>
+          <th>Description</th>
+          <th>Ressource</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for projet in projets %}
+          <tr>
+       
+            <td>{{ projet.nom }}</td>
+            <td>{{ projet.statut }}</td>
+            <td>{{ projet.priorite }}</td>
+            <td>{{ projet.description }}</td>
+            <td>{{ projet.ressource }}</td>
+          
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+</div>
+{% endblock %}

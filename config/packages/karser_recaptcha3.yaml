@@ -1,0 +1,7 @@
+karser_recaptcha3:
+    # Using Google's official test keys
+    site_key: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+    secret_key: '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+    score_threshold: 0.5
+    enabled: true
+    host: null 

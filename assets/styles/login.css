@@ -1,0 +1,103 @@
+/* Custom button styles */
+.btn-primary {
+    background: linear-gradient(135deg, #1e0425, #2986cc);
+    border: none;
+    color: #ffffff;
+    padding: 12px 30px;
+    font-weight: 500;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(30, 4, 37, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2986cc, #1e0425);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(41, 134, 204, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+/* Input group styling */
+.input-group {
+    transition: all 0.3s ease;
+}
+
+.input-group:focus-within {
+    box-shadow: 0 0 0 3px rgba(41, 134, 204, 0.1);
+}
+
+.input-group-text {
+    border: 1px solid rgba(41, 134, 204, 0.2);
+    background-color: rgba(41, 134, 204, 0.05);
+}
+
+.input-group-text i {
+    color: #2986cc;
+}
+
+/* Form control focus states */
+.form-control:focus {
+    border-color: #2986cc;
+    box-shadow: none;
+}
+
+/* Link styling */
+.text-primary {
+    color: #D291BC !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.text-primary:hover {
+    color: #1e0425 !important;
+    text-decoration: none;
+}
+
+/* Card styling */
+.card {
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+}
+
+/* Alert styling */
+.alert-info {
+    background-color: rgba(41, 134, 204, 0.1);
+    border: 1px solid rgba(41, 134, 204, 0.2);
+    color: #2986cc;
+}
+
+/* Form check styling */
+.form-check-input:checked {
+    background-color: #2986cc;
+    border-color: #2986cc;
+}
+
+/* reCAPTCHA styles */
+.grecaptcha-badge {
+    margin: 0 auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.g-recaptcha {
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.recaptcha-container {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Error message styles for reCAPTCHA */
+.recaptcha-error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

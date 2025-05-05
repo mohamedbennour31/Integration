@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Vote
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<div class="col-md-8 col-lg-6">
+				<div class="card shadow-sm rounded-4 border-0">
+					<div class="card-body p-4">
+						<h2 class="card-title mb-4 text-center">Add Vote</h2>
+
+						{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+						<div class="mb-3">
+							{{ form_label(form.idEvaluation, null, {'label_attr': {'class': 'form-label'}}) }}
+							{{ form_widget(form.idEvaluation, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.idEvaluation) }}
+						</div>
+
+						<div class="mb-3">
+							{{ form_label(form.idVotant, null, {'label_attr': {'class': 'form-label'}}) }}
+							{{ form_widget(form.idVotant, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.idVotant) }}
+						</div>
+
+						<div class="mb-3">
+							{{ form_label(form.idProjet, null, {'label_attr': {'class': 'form-label'}}) }}
+							{{ form_widget(form.idProjet, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.idProjet) }}
+						</div>
+
+						<div class="mb-3">
+							{{ form_label(form.idHackathon, null, {'label_attr': {'class': 'form-label'}}) }}
+							{{ form_widget(form.idHackathon, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.idHackathon) }}
+						</div>
+
+						<div class="mb-3">
+							{{ form_label(form.valeurVote, null, {'label_attr': {'class': 'form-label'}}) }}
+							{{ form_widget(form.valeurVote, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.valeurVote) }}
+						</div>
+
+						<div class="mb-4">
+							{{ form_label(form.date, null, {'label_attr': {'class': 'form-label'}}) }}
+							{{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.date) }}
+						</div>
+
+						<div class="d-grid">
+							<button type="submit" class="btn btn-primary btn-lg">Submit</button>
+						</div>
+
+						{{ form_end(form) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

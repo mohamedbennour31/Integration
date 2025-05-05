@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Backend
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<div class="text-center">
+			<h2 class="mb-4 text-white">Backend Dashboard</h2>
+			<a href="{{ path('vote_list') }}" class="btn btn-primary btn-lg me-3">Vote List</a>
+			<a href="{{ path('evaluation_list') }}" class="btn btn-secondary btn-lg">Evaluation List</a>
+		</div>
+	</div>
+{% endblock %}

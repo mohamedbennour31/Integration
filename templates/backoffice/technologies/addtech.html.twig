@@ -1,0 +1,84 @@
+{# Add Technology Template #}
+{% extends 'backoffice/baseback.html.twig' %}
+
+{% block title %}Ajouter Technologie{% endblock %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Ajouter une Nouvelle Technologie</h3>
+        </div>
+        <div class="card-body">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Nouvelle Technologie</h3>
+            </div>
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'autocomplete': 'off'}}) }}
+            <div class="card-body">
+              <div class="form-group">
+                {{ form_label(form.nom_tech, 'Nom de la Technologie') }}
+                {{ form_widget(form.nom_tech, {
+                  'attr': {
+                    'class': 'form-control' ~ (form.nom_tech.vars.errors|length ? ' is-invalid'),
+                    'placeholder': 'Entrez le nom'
+                  }
+                }) }}
+                {{ form_errors(form.nom_tech) }}
+              </div>
+              <div class="form-group">
+                {{ form_label(form.type_tech, 'Type') }}
+                {{ form_widget(form.type_tech, {
+                  'attr': {
+                    'class': 'form-control' ~ (form.type_tech.vars.errors|length ? ' is-invalid'),
+                    'placeholder': 'Type de technologie'
+                  }
+                }) }}
+                {{ form_errors(form.type_tech) }}
+              </div>
+              <div class="form-group">
+                {{ form_label(form.complexite, 'Complexité') }}
+                {{ form_widget(form.complexite, {
+                  'attr': {
+                    'class': 'form-control' ~ (form.complexite.vars.errors|length ? ' is-invalid'),
+                    'placeholder': 'Complexité'
+                  }
+                }) }}
+                {{ form_errors(form.complexite) }}
+              </div>
+              <div class="form-group">
+                {{ form_label(form.documentaire, 'Documentaire') }}
+                {{ form_widget(form.documentaire, {
+                  'attr': {
+                    'class': 'form-control' ~ (form.documentaire.vars.errors|length ? ' is-invalid'),
+                    'placeholder': 'Documentaire'
+                  }
+                }) }}
+                {{ form_errors(form.documentaire) }}
+              </div>
+              <div class="form-group">
+                {{ form_label(form.compatibilite, 'Compatibilité') }}
+                {{ form_widget(form.compatibilite, {
+                  'attr': {
+                    'class': 'form-control' ~ (form.compatibilite.vars.errors|length ? ' is-invalid'),
+                    'placeholder': 'Compatibilité'
+                  }
+                }) }}
+                {{ form_errors(form.compatibilite) }}
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Ajouter</button>
+            </div>
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

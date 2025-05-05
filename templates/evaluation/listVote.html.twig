@@ -1,0 +1,143 @@
+{% extends 'evaluation/baseBack.html.twig' %}
+
+{% block title %}Votes List
+{% endblock %}
+
+{% block content %}
+	<div class="container mt-5">
+		<h2 class="mb-4 text-center fw-bold">🗳️ Votes List</h2>
+
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success alert-dismissible fade show" role="alert">
+				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		{% endfor %}
+
+		{# Search Form #}
+		<div class="card mb-4 shadow-sm">
+			<div class="card-body">
+				<form method="get" action="{{ path('vote_list') }}" class="row g-3">
+					<div class="col-md-8">
+						<input type="text" name="search" class="form-control" placeholder="Search by project id" value="{{ search }}">
+					</div>
+					<div class="col-md-2">
+						<button type="submit" class="btn btn-primary w-100">Search</button>
+					</div>
+					<div class="col-md-2">
+						<a href="{{ path('vote_list') }}" class="btn btn-outline-secondary w-100">Reset</a>
+					</div>
+					<div class="col-md-3" style="margin-left:370px;margin-top:20px;">
+						<a href="{{ path('vote_pdf') }}" class="btn btn-outline-secondary w-100">PDF</a>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="table-responsive shadow-sm rounded-4 border">
+			<table class="table table-hover align-middle mb-0">
+				<thead class="table-light" style="background: linear-gradient(90deg, #f8f9fa 0%, #e9ecef 100%);">
+					<tr>
+						<th scope="col">
+							<a href="{{ path('vote_list', {sort: 'v.id', direction: (sort == 'v.id' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								#
+								{% if sort == 'v.id' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('vote_list', {sort: 'e.id', direction: (sort == 'e.id' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Evaluation
+								{% if sort == 'e.id' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('vote_list', {sort: 'vt.id', direction: (sort == 'vt.id' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Voter
+								{% if sort == 'vt.id' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('vote_list', {sort: 'p.id', direction: (sort == 'p.id' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Project
+								{% if sort == 'p.id' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('vote_list', {sort: 'h.id', direction: (sort == 'h.id' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Hackathon
+								{% if sort == 'h.id' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('vote_list', {sort: 'v.valeurVote', direction: (sort == 'v.valeurVote' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Vote Value
+								{% if sort == 'v.valeurVote' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('vote_list', {sort: 'v.date', direction: (sort == 'v.date' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Date
+								{% if sort == 'v.date' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col" class="text-center">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for vote in votes %}
+						<tr>
+							<th scope="row">{{ vote.id }}</th>
+							<td>
+								<span class="fw-semibold">{{ vote.idEvaluation }}</span>
+							</td>
+							<td>{{ vote.idVotant }}</td>
+							<td>{{ vote.idProjet }}</td>
+							<td>{{ vote.idHackathon }}</td>
+							<td>
+								{% if vote.valeurVote >= 7 %}
+									<span class="badge bg-success fs-6">👍
+										{{ vote.valeurVote }}</span>
+								{% elseif vote.valeurVote >= 4 %}
+									<span class="badge bg-warning text-dark fs-6">➖
+										{{ vote.valeurVote }}</span>
+								{% else %}
+									<span class="badge bg-danger fs-6">👎
+										{{ vote.valeurVote }}</span>
+								{% endif %}
+							</td>
+							<td>{{ vote.date|date('Y-m-d') }}</td>
+							<td class="text-center">
+								<a href="{{ path('vote_edit', {'id': vote.id}) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit">✏️</a>
+								<a href="{{ path('vote_delete', {'id': vote.id}) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this vote?')" title="Delete">🗑️</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="8" class="text-center text-muted">No votes found.</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="d-grid">
+			<a href="{{ path('project_list') }}" class="btn btn-success btn-lg mt-4">
+				➕ Add New Vote
+			</a>
+		</div>
+	</div>
+{% endblock %}

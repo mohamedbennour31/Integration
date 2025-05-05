@@ -1,0 +1,55 @@
+{% extends 'backoffice/baseback.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Hackathon Management</h3>
+                    </div>
+                    <div class="card-body">
+                        {% for message in app.flashes('success') %}
+                            <div class="alert alert-success">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                        
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Date Début</th>
+                                        <th>Date Fin</th>
+                                        <th>lieu</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for hackathon in hackathons %}
+                                        <tr>
+                                            <td>{{hackathon.id_hackathon }}</td>
+                                            <td> {{hackathon.nom_hackathon }}</td>
+                                            <td> {{hackathon.description }}</td>
+                                            <td> {{hackathon.date_debut|date("j F , Y")  }}</td>
+                                            <td> {{hackathon.date_fin|date("j F , Y")  }}</td>
+                                            <td> {{hackathon.lieu  }}</td>
+                                            <td> <a href="{{ path('admin_delete_hackathon', {'id': hackathon.id_hackathon}) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce hackathon ?')">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </a></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

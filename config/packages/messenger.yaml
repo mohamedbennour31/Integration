@@ -1,0 +1,32 @@
+framework:
+    messenger:
+        # Enable failure transport for handling failed messages
+        failure_transport: failed
+
+        transports:
+            # Async transport (using Doctrine by default)
+            async: 
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                # Enable Doctrine retry strategy
+                retry_strategy:
+                    max_retries: 3
+                    multiplier: 2
+                    delay: 1000
+            
+            # Failed messages transport
+            failed: 'doctrine://default?queue_name=failed'
+            
+            # Synchronous transport (for immediate processing)
+            sync: 'sync://'
+
+        routing:
+            # Route email messages to async transport
+                     'App\Message\SendEmailMessage': async
+
+
+when@test:
+    framework:
+        messenger:
+            transports:
+                async: 'in-memory://'
+                failed: 'in-memory://'

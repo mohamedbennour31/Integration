@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col-md-5">
+            <div class="card shadow-lg" style="border-radius: 1rem; border: none; background: linear-gradient(to right bottom, #ffffff, #f8f9fa);">
+                <div class="card-body p-5">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold mb-3" style="color: #1b3347;">Connexion</h2>
+                        <p class="text-muted">Bienvenue sur notre plateforme</p>
+                    </div>
+
+                    {% if error %}
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        </div>
+                    {% endif %}
+
+                    <form action="{{ path('app_login') }}" method="post" class="needs-validation" id="login-form">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <div class="form-group mb-4">
+                            <label for="username" class="form-label fw-semibold">Email</label>
+                            <div class="input-group input-group-lg shadow-sm">
+                                <span class="input-group-text bg-primary bg-opacity-10 border-end-0">
+                                    <i class="bi bi-envelope text-primary"></i>
+                                </span>
+                                <input type="email" name="_username" id="username" class="form-control border-start-0" value="{{ last_username }}" required autofocus placeholder="votre.email@exemple.com">
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="password" class="form-label fw-semibold">Mot de passe</label>
+                            <div class="input-group input-group-lg shadow-sm">
+                                <span class="input-group-text bg-primary bg-opacity-10 border-end-0">
+                                    <i class="bi bi-lock text-primary"></i>
+                                </span>
+                                <input type="password" name="password" id="password" class="form-control border-start-0" required placeholder="Votre mot de passe">
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="_remember_me" id="remember_me">
+                                    <label class="form-check-label text-muted" for="remember_me">Se souvenir de moi</label>
+                                </div>
+                                <a href="{{ path('app_forgot_password_request') }}" class="text-primary text-decoration-none fw-semibold">Mot de passe oublié ?</a>
+                            </div>
+                        </div>
+                        
+                        <!-- reCAPTCHA -->
+                        <div class="form-group mb-4 d-flex justify-content-center">
+                            <div class="g-recaptcha" data-sitekey="{{ google_recaptcha2_site_key }}" data-theme="light"></div>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-lg w-100 mb-4 shadow-sm" type="submit">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+                        </button>
+                        
+                        <div class="text-center mt-4">
+                            <p class="mb-0">Pas encore de compte ? <a href="{{ path('app_register') }}" class="text-primary fw-semibold">S'inscrire</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Load reCAPTCHA API -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}

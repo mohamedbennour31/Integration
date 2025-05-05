@@ -1,0 +1,465 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block title %}Liste des Hackathons{% endblock %}
+
+
+  {% block body %}
+
+
+<div class="container section-title" data-aos="fade-up">
+  <h1>Liste des Hackathons</h1>
+  <p><span>Découvrez nos </span> <span class="description-title">hackathons passionnants</span></p>
+</div>
+<!-- End Section Title -->
+
+<div class="container">
+  <ul class="nav nav-tabs d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
+    <li class="nav-item">
+      <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#hackathons">
+        <h4>tous les hackathons</h4>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link " data-bs-toggle="tab" data-bs-target="#hackathon-upcoming">
+        <h4>À venir</h4>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" data-bs-target="#hackathon-ongoing">
+        <h4>En cours</h4>
+      </a>
+    </li>  
+    {% if app.user and 'ROLE_ORGANISATEUR' in app.user.roles %}
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" data-bs-target="#mes-hackathons">
+        <h4>Mes Hackathons</h4>
+      </a>
+    </li>
+    {% endif %}
+
+    {% if app.user and 'ROLE_PARTICIPANT' in app.user.roles %}
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" data-bs-target="#mes-participations">
+        <h4>Mes Participations</h4>
+      </a>
+    </li>
+    {% endif %}
+    
+    {% if app.user %}
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" data-bs-target="#mes-communautes">
+        <h4>Mes Communautés</h4>
+      </a>
+    </li>
+    {% endif %}
+
+    
+  </ul>
+
+  <div class="tab-content" data-aos="fade-up" data-aos-delay="200">
+  {% set now = "now"|date("U") %}
+
+  <! tous les hackathon -->
+    <div class="tab-pane fade active show" id="hackathons">
+      <div class="tab-header text-center">
+        <h3>Nos hackathons à ne pas manquer</h3>
+      </div>
+      <div class="row gy-5">
+        {% for hackathon in hackathons %}
+          {% set debut = hackathon.date_debut|date("U") %}
+          {% set fin = hackathon.date_fin|date("U") %}
+          <div class="col-lg-4">
+            <div class="hackathon-card">
+              <div class="card-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <h3 class="card-title">{{ hackathon.nom_hackathon }}</h3>
+                  {# Badge d'état #}
+                  {% if debut <= now and fin >= now %}
+                    <span class="badge bg1">En cours</span>
+                  {% elseif debut > now %}
+                    <span class="badge bg2">À venir</span>
+                  {% elseif fin < now %}
+                    <span class="badge bg3">Terminé</span>
+                  {% endif %}
+                </div>
+                <h5 class="card-text">📍 {{ hackathon.lieu }}</h5>
+                <p class="card-date">📅 Du {{ hackathon.date_debut|date("j F , Y") }} 🕒 {{ hackathon.date_debut|date("H:i")}} <br>
+                  📅 Au {{ hackathon.date_fin|date("j F , Y") }}  🕒 {{ hackathon.date_fin|date("H:i") }}</p>
+                <div>
+                  <div class="d-flex align-items-center gap-3">
+                    <a href="{{ path('hackathon_details', { id: hackathon.id_hackathon }) }}" class="btn btn-primary">Détails</a>
+                    {% if debut > now %}
+                      <div id="countdown-{{ hackathon.id_hackathon }}" class="countdown text-danger fw-bold"></div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      
+    </div>
+
+
+    <!-- les hackathon a venir -->
+    <div class="tab-pane " id="hackathon-upcoming">
+      <div class="tab-header text-center">
+        <h3>Nos Hackathons à venir</h3>
+      </div>
+      <div class="row gy-5">
+        {% for hackathon in hackathons %}
+          {% set debut = hackathon.date_debut|date("U") %}
+          {% set fin = hackathon.date_fin|date("U") %}
+          {% if debut > now %}
+          <div class="col-lg-4">
+            <div class="hackathon-card">
+              <div class="card-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <h3 class="card-title">{{ hackathon.nom_hackathon }}</h3>
+                  {# Badge d'état #}
+                  {% if debut <= now and fin >= now %}
+                    <span class="badge bg1">En cours</span>
+                  {% elseif debut > now %}
+                    <span class="badge bg2">À venir</span>
+                  {% elseif fin < now %}
+                    <span class="badge bg3">Terminé</span>
+                  {% endif %}
+                </div>
+                <h5 class="card-text">📍 {{ hackathon.lieu }}</h5>
+                <p class="card-date">📅 Du {{ hackathon.date_debut|date("j F , Y") }} 🕒 {{ hackathon.date_debut|date("H:i")}} <br>
+                  📅 Au {{ hackathon.date_fin|date("j F , Y") }}  🕒 {{ hackathon.date_fin|date("H:i") }}</p>
+                <div>
+                  <div class="d-flex align-items-center gap-3">
+                    <a href="{{ path('hackathon_details', { id: hackathon.id_hackathon }) }}" class="btn btn-primary">Détails</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    
+
+   <!-- hackathon en cours -->
+    <div class="tab-pane fade" id="hackathon-ongoing">
+      <div class="tab-header text-center">
+        <h3>Nos hackathons à ne pas manquer</h3>
+      </div>
+      <div class="row gy-5">
+        {% for hackathon in hackathons %}
+        {% set debut = hackathon.date_debut|date("U") %}
+        {% set fin = hackathon.date_fin|date("U") %}  
+            {% if debut <= now and fin >= now %}
+            <div class="col-lg-4">
+              <div class="hackathon-card">
+                <div class="card-body">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <h3 class="card-title">{{ hackathon.nom_hackathon }}</h3>
+                  {% if debut <= now and fin >= now %}
+  <span class="badge bg1">En cours</span>
+{% elseif debut > now %}
+  <span class="badge bg2">À venir</span>
+{% elseif fin < now %}
+  <span class="badge bg3">Terminé</span>
+{% endif %}
+                  </div>
+                  <h5 class="card-text">📍 {{ hackathon.lieu }}</h5>
+                  <p class="card-date">📅 Du {{ hackathon.date_debut|date("j F , Y") }} 🕒 {{ hackathon.date_debut|date("H:i")}} 
+                  <br>
+                  📅 Au {{ hackathon.date_fin|date("j F , Y") }}  🕒 {{ hackathon.date_fin|date("H:i") }}</p>
+                  <div>
+                    <a href="{{ path('hackathon_details', { id: hackathon.id_hackathon }) }}" class="btn btn-primary">Détails</a>
+                  </div>
+                </div>
+              </div>
+            
+            
+            </div>
+            {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+     <! -- les hackathons de chaque organisateur --!>
+      <div class="tab-pane fade" id="mes-hackathons">
+        <div class="tab-header text-center">
+          <h3>Mes Hackathons</h3>
+        </div>
+        <div class="row gy-5">
+        {% for hackathon in hackathons %}
+        {% if hackathon.id_organisateur.id == app.user.id %}
+            <div class="col-lg-4">
+              <div class="hackathon-card">
+                <div class="card-body">
+                  <h3 class="card-title">{{ hackathon.nom_hackathon }}</h3>
+                  <h5 class="card-text">📍 {{ hackathon.lieu }}</h5>
+                  <p class="card-date">📅 Du {{ hackathon.date_debut|date("j F , Y") }} 🕒 {{ hackathon.date_debut|date("H:i")}} 
+                  <br>
+                  📅 Au {{ hackathon.date_fin|date("j F , Y") }}  🕒 {{ hackathon.date_fin|date("H:i") }}</p>
+                  <div>
+                    <a href="{{ path('hackathon_details', { id: hackathon.id_hackathon }) }}" class="btn btn-primary">Détails</a>
+                    {% if hackathon.participations|length > hackathon.max_participants %}
+                      <span class="badge bg-danger">Complet</span>
+                      {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+      </div>
+      </div>
+
+
+      <div class="tab-pane fade" id="mes-participations">
+        <div class="tab-header text-center">
+          <h3>Mes Participations</h3>
+        </div>
+        <div class="row gy-5">
+          {% for participation in participations %}
+          {% set debut = participation.hackathon.date_debut|date("U") %}
+          {% if participation.participant.id == app.user.id %}
+            <div class="col-lg-4">
+              <div class="hackathon-card">
+                <div class="card-body">
+                  <h3 class="card-title">{{ participation.hackathon.nom_hackathon }}</h3>
+                  <h5 class="card-text">📍 {{ participation.hackathon.lieu }}</h5>
+                  <p class="card-date">📅 Du {{ participation.hackathon.date_debut|date("F j, Y") }} 🕒 {{ participation.hackathon.date_debut|date("H:i")}} 
+                  <br>
+                  📅 Au {{ participation.hackathon.date_fin|date("j F , Y") }}  🕒 {{ participation.hackathon.date_fin|date("H:i") }}</p>
+                  <p>Statut de participation : {{ participation.statut }} </p>
+                  
+                 <div>
+                  <a href="{{ path('hackathon_details', { id: participation.hackathon.id_hackathon }) }}" class="btn btn-primary">Détails</a>
+                  {% if debut > now %}
+                  <a href="{{ path('annuler_participation', { id: participation.id_participation }) }}" 
+         class="btn btn-danger" 
+         onclick="return confirm('Es-tu sûr de vouloir annuler ta participation ?');">
+        Annuler la participation
+      </a>
+      {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          {% else %}
+            <div class="col-12 text-center">
+              <p class="text-muted">Aucune participation pour le moment.</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+     
+      <div class="tab-pane fade" id="mes-communautes">
+        <div class="tab-header text-center">
+          <h3>Mes Communautés</h3>
+        </div>
+        <div class="row gy-5">
+          {% if app.user and 'ROLE_ORGANISATEUR' in app.user.roles and communautesOrganisateur is defined %}
+            {% for communaute in communautesOrganisateur %}
+              <div class="col-lg-4">
+                <div class="hackathon-card">
+                  <div class="card-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                      <h3 class="card-title">{{ communaute.nom }}</h3>
+                      {% if communaute.is_active %}
+                        <span class="badge bg1">Actif</span>
+                      {% else %}
+                        <span class="badge bg3">Inactif</span>
+                      {% endif %}
+                    </div>
+                    <p>{{ communaute.description|slice(0, 100) }}{% if communaute.description|length > 100 %}...{% endif %}</p>
+                    <div>
+                      <a href="{{ path('app_communaute_show', { id: communaute.id }) }}" class="btn btn-primary">Voir les chats</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+          
+          {% if app.user and 'ROLE_PARTICIPANT' in app.user.roles and communautesParticipant is defined %}
+            {% for communaute in communautesParticipant %}
+              <div class="col-lg-4">
+                <div class="hackathon-card">
+                  <div class="card-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                      <h3 class="card-title">{{ communaute.nom }}</h3>
+                      {% if communaute.is_active %}
+                        <span class="badge bg1">Actif</span>
+                      {% else %}
+                        <span class="badge bg3">Inactif</span>
+                      {% endif %}
+                    </div>
+                    <p>{{ communaute.description|slice(0, 100) }}{% if communaute.description|length > 100 %}...{% endif %}</p>
+                    <div>
+                      <a href="{{ path('app_communaute_show', { id: communaute.id }) }}" class="btn btn-primary">Voir les chats</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+          
+          {% if (app.user and 'ROLE_ORGANISATEUR' in app.user.roles and communautesOrganisateur is defined and communautesOrganisateur|length == 0) 
+              or (app.user and 'ROLE_PARTICIPANT' in app.user.roles and communautesParticipant is defined and communautesParticipant|length == 0) %}
+            <div class="col-12 text-center">
+              <p class="text-muted">Vous n'avez pas encore de communautés.</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+   
+  </div>
+
+  <!-- calendrier !-->
+    <div class="text-center mt-5 mb-4">
+        <a href="{{ path('hackathons_calendar') }}" class="btn btn-primary btn-lg">
+            <i class="bi bi-calendar3"></i> Voir le calendrier des hackathons
+        </a>
+    </div>
+    
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    {% for hackathon in hackathons %}
+      {% set debutTimestamp = hackathon.date_debut|date("U") %}
+      {% if debutTimestamp > now %}
+        let countdownEl{{ hackathon.id_hackathon }} = document.getElementById('countdown-{{ hackathon.id_hackathon }}');
+        if (countdownEl{{ hackathon.id_hackathon }}) {
+          let startTime = {{ debutTimestamp }} * 1000;
+
+          let interval = setInterval(function () {
+            let nowTime = new Date().getTime();
+            let distance = startTime - nowTime;
+
+            if (distance < 0) {
+              clearInterval(interval);
+              countdownEl{{ hackathon.id_hackathon }}.innerHTML = "<span class='badge bg-success'>Hackathon en cours</span>";
+            } else {
+              let d = Math.floor(distance / (1000 * 60 * 60 * 24));
+              let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+              let s = Math.floor((distance % (1000 * 60)) / 1000);
+
+              countdownEl{{ hackathon.id_hackathon }}.innerHTML = 
+                `<div class="countdown-box">
+                  <span>${d}j</span> :
+                  <span>${h}h</span> :
+                  <span>${m}m</span> :
+                  <span>${s}s</span>
+                </div>`;
+            }
+          }, 1000);
+        }
+      {% endif %}
+    {% endfor %}
+  });
+</script>
+
+<!-- style pour le chronometre -->
+<style>
+.countdown {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 12px;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  animation: pulse 1.5s infinite ease-in-out;
+  transition: transform 0.3s ease;
+}
+
+.countdown span {
+  display: inline-block;
+}
+
+.countdown .time-part {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  min-width: 40px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+</style>
+
+<style>
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    gap: 6px;
+}
+
+.pagination li {
+    display: inline-block;
+}
+
+.pagination a,
+.pagination span {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #f2f2f2;
+    color: #333;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+.pagination a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination .current {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+</style>
+
+
+
+{% endblock %}
+
+

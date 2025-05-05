@@ -1,0 +1,409 @@
+{% extends 'backoffice/baseback.html.twig' %}
+
+{% block title %}Hackathon Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #4B79A1, #283E51);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card {
+            border: none;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+        .card-header {
+            background: white;
+            border-bottom: 2px solid #f0f0f0;
+            padding: 1.5rem;
+        }
+        .btn-export {
+            background: #4B79A1;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn-export:hover {
+            background: #283E51;
+            transform: translateY(-2px);
+        }
+        .search-box {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+        }
+        .table {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .table thead th {
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            color: #495057;
+        }
+        .btn-action {
+            border-radius: 6px;
+            padding: 0.4rem 1rem;
+            margin: 0 0.2rem;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            transform: translateY(-1px);
+        }
+        .status-active {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .status-inactive {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .stats-card {
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            min-height: 350px;
+        }
+        .stats-card-header {
+            background: linear-gradient(135deg, #4B79A1, #283E51);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 15px 15px 0 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .stats-card-body {
+            padding: 1.5rem;
+            height: 300px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ importmap('app') }}
+    <!-- Load Chart.js directly -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Check if the charts were rendered correctly
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Charts should be loading now');
+            
+            // Create the role chart manually
+            {% if debugData is defined and debugData.roleStatistics is defined %}
+                const roleCtx = document.getElementById('roleChart');
+                if (roleCtx) {
+                    // Convert role statistics to arrays for chart
+                    const roleLabels = [];
+                    const roleData = [];
+                    
+                    {% for role, count in debugData.roleStatistics %}
+                        roleLabels.push("{{ role }}");
+                        roleData.push({{ count }});
+                    {% endfor %}
+                    
+                    // Role chart colors
+                    const roleColors = roleLabels.map(label => {
+                        const colorMap = {
+                            'ROLE_ADMIN': 'rgb(255, 99, 132)',
+                            'ROLE_ORGANISATEUR': 'rgb(54, 162, 235)',
+                            'ROLE_PARTICIPANT': 'rgb(255, 205, 86)',
+                            'Regular Users': 'rgb(75, 192, 192)',
+                            'No Data': 'rgb(201, 203, 207)'
+                        };
+                        return colorMap[label] || 'rgb(153, 102, 255)';
+                    });
+                    
+                    new Chart(roleCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: roleLabels,
+                            datasets: [{
+                                label: 'User Roles Distribution',
+                                data: roleData,
+                                backgroundColor: roleColors,
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'User Roles Distribution',
+                                    font: { size: 16 }
+                                },
+                                legend: {
+                                    position: 'right'
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    console.error('Role chart canvas not found');
+                }
+            {% endif %}
+            
+            // Create the status chart manually
+            {% if debugData is defined and debugData.statusStatistics is defined %}
+                const statusCtx = document.getElementById('statusChart');
+                if (statusCtx) {
+                    // Convert status statistics to arrays for chart
+                    const statusLabels = [];
+                    const statusData = [];
+                    
+                    {% for status, count in debugData.statusStatistics %}
+                        statusLabels.push("{{ status }}");
+                        statusData.push({{ count }});
+                    {% endfor %}
+                    
+                    // Status chart colors
+                    const statusColors = statusLabels.map(label => {
+                        const colorMap = {
+                            'active': 'rgb(75, 192, 192)',
+                            'inactive': 'rgb(255, 99, 132)',
+                            'No Data': 'rgb(201, 203, 207)'
+                        };
+                        return colorMap[label] || 'rgb(201, 203, 207)';
+                    });
+                    
+                    new Chart(statusCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: statusLabels,
+                            datasets: [{
+                                label: 'User Status Distribution',
+                                data: statusData,
+                                backgroundColor: statusColors,
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'User Status Distribution',
+                                    font: { size: 16 }
+                                },
+                                legend: {
+                                    position: 'right'
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    console.error('Status chart canvas not found');
+                }
+            {% endif %}
+            
+            // Add error handling for charts
+            window.addEventListener('error', function(e) {
+                console.error('JavaScript error detected:', e.error);
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid py-4">
+        <div class="dashboard-header">
+            <h1 class="display-4 mb-0">Hackathon Community Dashboard</h1>
+            <p class="lead mb-0">Manage your community members and participants</p>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card stats-card">
+                    <div class="stats-card-header">
+                        <i class="fas fa-users-cog me-2"></i> User Roles Distribution
+                    </div>
+                    <div class="stats-card-body">
+                        <canvas id="roleChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card stats-card">
+                    <div class="stats-card-header">
+                        <i class="fas fa-user-shield me-2"></i> User Status Distribution
+                    </div>
+                    <div class="stats-card-body">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title text-primary mb-0">Community Members</h3>
+                        <a href="{{ path('admin_dashboard_export_pdf') }}" class="btn btn-export text-white">
+                            <i class="fas fa-file-pdf me-2"></i> Export Members List
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <!-- Search and Filter Form -->
+                        <form method="get" class="mb-4">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="input-group search-box">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="fas fa-search text-muted"></i>
+                                        </span>
+                                        <input type="text" name="search" class="form-control border-start-0 ps-0" 
+                                               placeholder="Search members..." value="{{ currentSearch }}"
+                                               style="border-left: none; box-shadow: none;">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <select name="status" class="form-select" onchange="this.form.submit()">
+                                        <option value="">All Statuses</option>
+                                        <option value="active" {% if currentStatus == 'active' %}selected{% endif %}>
+                                            <i class="fas fa-circle text-success"></i> Active
+                                        </option>
+                                        <option value="inactive" {% if currentStatus == 'inactive' %}selected{% endif %}>
+                                            <i class="fas fa-circle text-muted"></i> Inactive
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                        {% for message in app.flashes('success') %}
+                            <div class="alert alert-success">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                        
+                        {% for message in app.flashes('error') %}
+                            <div class="alert alert-danger">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                        
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <a href="{{ path('admin_dashboard', {
+                                                'sort': 'idUser',
+                                                'direction': currentSort == 'idUser' and currentDirection == 'asc' ? 'desc' : 'asc',
+                                                'search': currentSearch,
+                                                'status': currentStatus
+                                            }) }}" class="text-dark">
+                                                ID
+                                                {% if currentSort == 'id' %}
+                                                    <i class="fas fa-sort-{{ currentDirection == 'asc' ? 'up' : 'down' }}"></i>
+                                                {% endif %}
+                                            </a>
+                                        </th>
+                                        <th>
+                                            <a href="{{ path('admin_dashboard', {
+                                                'sort': 'nomUser',
+                                                'direction': currentSort == 'nomUser' and currentDirection == 'asc' ? 'desc' : 'asc',
+                                                'search': currentSearch,
+                                                'status': currentStatus
+                                            }) }}" class="text-dark">
+                                                Name
+                                                {% if currentSort == 'nomUser' %}
+                                                    <i class="fas fa-sort-{{ currentDirection == 'asc' ? 'up' : 'down' }}"></i>
+                                                {% endif %}
+                                            </a>
+                                        </th>
+                                        <th>
+                                            <a href="{{ path('admin_dashboard', {
+                                                'sort': 'emailUser',
+                                                'direction': currentSort == 'emailUser' and currentDirection == 'asc' ? 'desc' : 'asc',
+                                                'search': currentSearch,
+                                                'status': currentStatus
+                                            }) }}" class="text-dark">
+                                                Email
+                                                {% if currentSort == 'emailUser' %}
+                                                    <i class="fas fa-sort-{{ currentDirection == 'asc' ? 'up' : 'down' }}"></i>
+                                                {% endif %}
+                                            </a>
+                                        </th>
+                                        <th>Phone</th>
+                                        <th>Address</th>
+                                        <th>
+                                            <a href="{{ path('admin_dashboard', {
+                                                'sort': 'statusUser',
+                                                'direction': currentSort == 'statusUser' and currentDirection == 'asc' ? 'desc' : 'asc',
+                                                'search': currentSearch,
+                                                'status': currentStatus
+                                            }) }}" class="text-dark">
+                                                Status
+                                                {% if currentSort == 'statusUser' %}
+                                                    <i class="fas fa-sort-{{ currentDirection == 'asc' ? 'up' : 'down' }}"></i>
+                                                {% endif %}
+                                            </a>
+                                        </th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                        <tr>
+                                            <td>{{ user.id }}</td>
+                                            <td>{{ user.nomUser }} {{ user.prenomUser }}</td>
+                                            <td>{{ user.emailUser }}</td>
+                                            <td>{{ user.telUser }}</td>
+                                            <td>{{ user.adresseUser }}</td>
+                                            <td>
+                                                {% if user.statusUser == 'active' %}
+                                                    <span class="status-active">
+                                                        <i class="fas fa-circle me-1"></i> Active
+                                                    </span>
+                                                {% else %}
+                                                    <span class="status-inactive">
+                                                        <i class="fas fa-circle me-1"></i> Inactive
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('admin_user_edit', {'id': user.id}) }}" 
+                                                   class="btn btn-action btn-sm btn-outline-primary">
+                                                    <i class="fas fa-edit me-1"></i> Edit
+                                                </a>
+                                                
+                                                {% if user.statusUser == 'active' %}
+                                                    <a href="{{ path('admin_user_ban', {'id': user.id}) }}" 
+                                                       class="btn btn-action btn-sm btn-outline-warning"
+                                                       onclick="return confirm('Are you sure you want to ban this user?')">
+                                                        <i class="fas fa-ban me-1"></i> Ban
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ path('admin_user_unban', {'id': user.id}) }}" 
+                                                       class="btn btn-action btn-sm btn-outline-success">
+                                                        <i class="fas fa-check-circle me-1"></i> Unban
+                                                    </a>
+                                                {% endif %}
+                                                
+                                                <a href="{{ path('admin_user_delete', {'id': user.id}) }}" 
+                                                   class="btn btn-action btn-sm btn-outline-danger"
+                                                   onclick="return confirm('Are you sure you want to delete this member?')">
+                                                    <i class="fas fa-trash me-1"></i> Delete
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

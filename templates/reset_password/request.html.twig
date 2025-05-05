@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialisation du mot de passe{% endblock %}
+
+{% block body %}
+<div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col-md-5">
+            <div class="card shadow-lg" style="border-radius: 1rem; border: none; background: linear-gradient(to right bottom, #ffffff, #f8f9fa);">
+                <div class="card-body p-5">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold mb-3" style="color: #1b3347;">Mot de passe oublié</h2>
+                        <p class="text-muted">Entrez votre adresse email pour recevoir un lien de réinitialisation</p>
+                    </div>
+
+                    {% for flash_error in app.flashes('reset_password_error') %}
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <div>{{ flash_error }}</div>
+                        </div>
+                    {% endfor %}
+
+                    {{ form_start(requestForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                        <div class="form-group mb-4">
+                            <label for="reset_password_request_form_emailUser" class="form-label fw-semibold">Email</label>
+                            <div class="input-group input-group-lg shadow-sm">
+                                <span class="input-group-text bg-primary bg-opacity-10 border-end-0">
+                                    <i class="bi bi-envelope text-primary"></i>
+                                </span>
+                                {{ form_widget(requestForm.emailUser, {
+                                    'attr': {
+                                        'class': 'form-control border-start-0',
+                                        'placeholder': 'votre.email@exemple.com',
+                                        'required': 'required'
+                                    }
+                                }) }}
+                            </div>
+                            {{ form_errors(requestForm.emailUser) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-4 shadow-sm">
+                            <i class="bi bi-envelope-paper me-2"></i>Envoyer le lien
+                        </button>
+
+                        <div class="text-center">
+                            <p class="mb-0 text-muted">
+                                <a href="{{ path('app_login') }}" class="text-primary fw-semibold text-decoration-none">
+                                    <i class="bi bi-arrow-left me-1"></i>Retour à la connexion
+                                </a>
+                            </p>
+                        </div>
+                    {{ form_end(requestForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+$(document).ready(function() {
+    // Form validation
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    }
+});
+</script>
+{% endblock %}

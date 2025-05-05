@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}AdminLTE 3 | Dashboard{% endblock %}</title>    <!-- Google Font: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- AdminLTE Theme style -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <!-- Custom Admin Theme -->
+    <link rel="stylesheet" href="{{ asset('css/admin-custom.css') }}">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">    <!-- Preloader -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <img class="animation__shake" src="{{ asset('FrontOffice/assets/img/logo.png') }}" alt="HackathonLogo" height="60" width="60">
+    </div>    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="{{ path('app_home') }}" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-bell"></i> Notifications
+                </a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-question-circle"></i> Help
+                </a>
+            </li>
+        </ul>
+
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <!-- Search -->
+            <li class="nav-item">
+                <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                    <i class="fas fa-search"></i>
+                </a>
+                <div class="navbar-search-block">
+                    <form class="form-inline">
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-navbar" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </li>
+
+            <!-- Messages & Notifications (keep as is) -->
+            {% block navbar_right %}
+                <!-- Your existing navbar right content here -->
+            {% endblock %}
+        </ul>
+    </nav>    <!-- Main Sidebar -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="{{ path('app_home') }}" class="brand-link">
+            <img src="{{ asset('FrontOffice/assets/img/logo.png') }}" alt="Hackathon Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">Hackify</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">            <!-- User Panel -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    {% if app.user and app.user.photoUser %}
+                        <img src="{{ asset('uploads/profile_pictures/' ~ app.user.photoUser) }}" class="img-circle elevation-2" alt="User Image">
+                    {% else %}
+                        <img src="{{ asset('FrontOffice/assets/img/default-avatar.png') }}" class="img-circle elevation-2" alt="User Image">
+                    {% endif %}
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">
+                        {% if app.user %}
+                            {{ app.user.nomUser }} {{ app.user.prenomUser }}
+                        {% else %}
+                            Admin
+                        {% endif %}
+                    </a>
+                </div>
+            </div><!-- Sidebar Menu -->
+            <nav class="mt-2">
+            {% block sidebar_menu %}
+             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+             <li class="nav-item">
+                 <a href="{{ path('admin_dashboard') }}" class="nav-link">
+                     <i class="nav-icon fas fa-users-cog"></i>
+                    <p>Members Management</p>
+                 </a>
+             </li>
+             <li class="nav-item">
+                 <a href="{{ path('app_communaute_back') }}" class="nav-link">
+                     <i class="nav-icon fas fa-users-friends"></i>
+                     <p>Communities</p>
+                 </a>
+             </li>
+             <li class="nav-item">
+                 <a href="/admin/hackathons" class="nav-link">
+                     <i class="nav-icon fas fa-laptop-code"></i>
+                     <p>Hackathons</p>
+                 </a>
+             </li>
+             <li class="nav-item">
+                 <a href="#" class="nav-link">
+                     <i class="nav-icon fas fa-project-diagram"></i>
+                     <p>Projects</p>
+                 </a>
+             </li>
+             <li class="nav-item">
+                 <a href="#" class="nav-link">
+                     <i class="nav-icon fas fa-chart-bar"></i>
+                     <p>Analytics</p>
+                 </a>
+             </li>
+             <li class="nav-header">ACCOUNT</li>
+             <li class="nav-item">
+                 <a href="#" class="nav-link">
+                     <i class="nav-icon fas fa-user-circle"></i>
+                     <p>Profile</p>
+                 </a>
+             </li>
+             <li class="nav-item">
+                 <a href="{{ path('app_logout') }}" class="nav-link">
+                     <i class="nav-icon fas fa-sign-out-alt"></i>
+                     <p>Logout</p>
+                 </a>
+             </li>
+        
+    </ul>
+{% endblock %}
+
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <!-- Content Header -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">{% block page_title %}Dashboard{% endblock %}</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        {% block breadcrumb %}
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Home</a></li>
+                                <li class="breadcrumb-item active">Dashboard</li>
+                            </ol>
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <section class="content">
+            <div class="container-fluid">
+                {% block content %}{% endblock %}
+            </div>
+        </section>
+    </div>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        {% block control_sidebar %}{% endblock %}
+    </aside>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

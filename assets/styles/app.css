@@ -1,0 +1,105 @@
+/* Hero Section */
+.hero {
+    padding: 60px 0;
+    background-color: #f8f9fa;
+}
+
+.hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.hero p {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.hero .btn-get-started {
+    font-weight: 500;
+    font-size: 16px;
+    display: inline-block;
+    padding: 12px 28px;
+    background-color: #0d6efd;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.hero .btn-get-started:hover {
+    background-color: #0b5ed7;
+    transform: translateY(-2px);
+}
+
+.hero-img {
+    text-align: center;
+}
+
+.hero-img img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* About Section */
+.about {
+    padding: 60px 0;
+}
+
+.section-title {
+    text-align: center;
+    padding-bottom: 40px;
+}
+
+.section-title h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.section-title p {
+    font-size: 18px;
+    color: #666;
+}
+
+.section-title .description-title {
+    color: #0d6efd;
+}
+
+/* Animations */
+[data-aos] {
+    transition-duration: 1000ms;
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+    .hero h1 {
+        font-size: 36px;
+    }
+    
+    .hero-img {
+        margin-top: 40px;
+    }
+}
+
+/* General Styles */
+.section {
+    padding: 80px 0;
+    overflow: hidden;
+}
+
+.animated {
+    animation: up-down 2s ease-in-out infinite alternate-reverse both;
+}
+
+@keyframes up-down {
+    0% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(-10px);
+    }
+}

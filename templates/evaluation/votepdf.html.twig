@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Votes PDF</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				font-size: 12px;
+			}
+			h1 {
+				text-align: center;
+				margin-bottom: 20px;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 10px;
+			}
+			th,
+			td {
+				border: 1px solid #000;
+				padding: 8px;
+				text-align: left;
+			}
+			th {
+				background-color: #eee;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Vote Report</h1>
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>ID Votant</th>
+					<th>ID Projet</th>
+					<th>ID Hackathon</th>
+					<th>Valeur vote</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for vote in votes %}
+					<tr>
+						<td>{{ vote.id }}</td>
+						<td>{{ vote.idVotant }}</td>
+						<td>{{ vote.idProjet }}</td>
+						<td>{{ vote.idHackathon }}</td>
+						<td>{{ vote.valeurVote }}</td>
+						<td>{{ vote.date ? vote.date|date('Y-m-d H:i') : '' }}</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="6">No votes found.</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</body>
+</html>

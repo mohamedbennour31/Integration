@@ -1,0 +1,242 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow-lg" style="border-radius: 1rem; border: none; background: linear-gradient(to right bottom, #ffffff, #f8f9fa);">
+                <div class="card-body p-5">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold mb-3" style="color: #1b3347;">Inscription</h2>
+                        <p class="text-muted">Rejoignez notre communauté</p>
+                    </div>
+
+                    {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+                    {% if app.request.get('msg') == 'login_required' %}
+  <div class="alert alert-warning text-center" role="alert">
+    Veuillez vous inscrire pour accéder à tous les hackathons.
+  </div>
+{% endif %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                {{ form_label(registrationForm.nomUser, 'Nom', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    {{ form_widget(registrationForm.nomUser, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'placeholder': 'Votre nom'
+                                        }
+                                    }) }}
+                                </div>
+                                <div class="text-danger small mt-1">
+                                    {{ form_errors(registrationForm.nomUser) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                {{ form_label(registrationForm.prenomUser, 'Prénom', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    {{ form_widget(registrationForm.prenomUser, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'placeholder': 'Votre prénom'
+                                        }
+                                    }) }}
+                                </div>
+                                <div class="text-danger small mt-1">
+                                    {{ form_errors(registrationForm.prenomUser) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        {{ form_label(registrationForm.emailUser, 'Email', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        <div class="input-group input-group-lg shadow-sm">
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+                            {{ form_widget(registrationForm.emailUser, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'votre.email@exemple.com'
+                                }
+                            }) }}
+                        </div>
+                        <div class="text-danger small mt-1">
+                            {{ form_errors(registrationForm.emailUser) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        {{ form_label(registrationForm.roleUser, 'Type de compte', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        <div class="input-group input-group-lg shadow-sm">
+                            <span class="input-group-text">
+                                <i class="bi bi-person-badge"></i>
+                            </span>
+                            {{ form_widget(registrationForm.roleUser, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Sélectionnez votre rôle'
+                                }
+                            }) }}
+                        </div>
+                        <div class="text-danger small mt-1">
+                            {{ form_errors(registrationForm.roleUser) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                {{ form_label(registrationForm.telUser, 'Téléphone', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-phone"></i>
+                                    </span>
+                                    {{ form_widget(registrationForm.telUser, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'placeholder': '12345678'
+                                        }
+                                    }) }}
+                                </div>
+                                <div class="text-danger small mt-1">
+                                    {{ form_errors(registrationForm.telUser) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                {{ form_label(registrationForm.adresseUser, 'Adresse', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-geo-alt"></i>
+                                    </span>
+                                    {{ form_widget(registrationForm.adresseUser, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'placeholder': 'Votre adresse complète'
+                                        }
+                                    }) }}
+                                </div>
+                                <div class="text-danger small mt-1">
+                                    {{ form_errors(registrationForm.adresseUser) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        {{ form_label(registrationForm.profile_picture, 'Photo de profil', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        <div class="input-group input-group-lg shadow-sm">
+                            <span class="input-group-text">
+                                <i class="bi bi-image"></i>
+                            </span>
+                            {{ form_widget(registrationForm.profile_picture, {
+                                'attr': {
+                                    'class': 'form-control'
+                                }
+                            }) }}
+                        </div>
+                        <div class="text-danger small mt-1">
+                            {{ form_errors(registrationForm.profile_picture) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        <div class="alert alert-info small mb-2">
+                            <i class="bi bi-info-circle"></i> Le mot de passe doit contenir :
+                            <ul class="mb-0 mt-1">
+                                <li>Au moins 8 caractères</li>
+                                <li>Au moins une lettre majuscule</li>
+                                <li>Au moins une lettre minuscule</li>
+                                <li>Au moins un chiffre</li>
+                                <li>Au moins un caractère spécial (@$!%*?&)</li>
+                            </ul>
+                        </div>
+                        <div class="input-group input-group-lg shadow-sm">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            {{ form_widget(registrationForm.plainPassword.first, {
+                                'attr': {
+                                    'class': 'form-control' ~ (form_errors(registrationForm.plainPassword.first) ? ' is-invalid' : ''),
+                                    'placeholder': 'Votre mot de passe'
+                                }
+                            }) }}
+                        </div>
+                        <div class="text-danger small mt-1">
+                            {{ form_errors(registrationForm.plainPassword.first) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        {{ form_label(registrationForm.plainPassword.second, 'Confirmer le mot de passe', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        <div class="input-group input-group-lg shadow-sm">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            {{ form_widget(registrationForm.plainPassword.second, {
+                                'attr': {
+                                    'class': 'form-control' ~ (form_errors(registrationForm.plainPassword.second) ? ' is-invalid' : ''),
+                                    'placeholder': 'Confirmez votre mot de passe'
+                                }
+                            }) }}
+                        </div>
+                        <div class="text-danger small mt-1">
+                            {{ form_errors(registrationForm.plainPassword.second) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <div class="form-check">
+                            {{ form_widget(registrationForm.agreeTerms, {
+                                'attr': {
+                                    'class': 'form-check-input'
+                                }
+                            }) }}
+                            {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions d\'utilisation', {
+                                'label_attr': {
+                                    'class': 'form-check-label text-muted'
+                                }
+                            }) }}
+                        </div>
+                        <div class="text-danger small mt-1">
+                            {{ form_errors(registrationForm.agreeTerms) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">
+                            <i class="bi bi-check2-circle me-2"></i>S'inscrire
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="text-muted mb-0">Déjà inscrit ? 
+                            <a href="{{ path('app_login') }}" class="text-primary fw-semibold text-decoration-none">Se connecter</a>
+                        </p>
+                    </div>
+
+                    {{ form_end(registrationForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

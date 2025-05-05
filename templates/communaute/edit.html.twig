@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Community{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Edit Community</h1>
+
+        <div class="card">
+            <div class="card-body">
+                {{ form_start(form) }}
+                    <div class="mb-3">
+                        {{ form_label(form.nom, 'Community Name', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.nom) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '4'}}) }}
+                        {{ form_errors(form.description) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.image, 'Community Image', {'label_attr': {'class': 'form-label'}}) }}
+                        {% if communaute.image %}
+                            <div class="mb-2">
+                                <img src="{{ asset('uploads/communities/' ~ communaute.image) }}" alt="Current image" class="img-thumbnail" style="max-height: 200px;">
+                            </div>
+                        {% endif %}
+                        {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.image) }}
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ path('app_communaute_show', {'id': communaute.id}) }}" class="btn btn-secondary">Back to Community</a>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %} 

@@ -1,0 +1,155 @@
+{% extends 'evaluation/baseBack.html.twig' %}
+
+{% block title %}Evaluations List
+{% endblock %}
+
+{% block content %}
+	<div class="container mt-5">
+		<h2 class="mb-4 text-center fw-bold">📊 Evaluations List</h2>
+
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success alert-dismissible fade show" role="alert">
+				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		{% endfor %}
+
+		{# Search Form #}
+		<div class="card mb-4 shadow-sm">
+			<div class="card-body">
+				<form method="get" action="{{ path('evaluation_list') }}" class="row g-3">
+					<div class="col-md-8">
+						<input type="text" name="search" class="form-control" placeholder="Search by project id" value="{{ search }}">
+					</div>
+					<div class="col-md-2">
+						<button type="submit" class="btn btn-primary w-100">Search</button>
+					</div>
+					<div class="col-md-2">
+						<a href="{{ path('evaluation_list') }}" class="btn btn-outline-secondary w-100">Reset</a>
+					</div>
+					<div class="col-md-3" style="margin-left:370px;margin-top:20px;">
+						<a href="{{ path('evaluation_pdf') }}" class="btn btn-outline-secondary w-100">PDF</a>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="table-responsive shadow-sm rounded-4 border">
+			<table class="table table-hover align-middle mb-0">
+				<thead class="table-light" style="background: linear-gradient(90deg, #f8f9fa 0%, #e9ecef 100%);">
+					<tr>
+						<th scope="col">
+							<a href="{{ path('evaluation_list', {sort: 'e.id', direction: (sort == 'e.id' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								#
+								{% if sort == 'e.id' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('evaluation_list', {sort: 'j.id', direction: (sort == 'j.id' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Jury
+								{% if sort == 'j.id' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('evaluation_list', {sort: 'h.id', direction: (sort == 'h.id' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Hackathon
+								{% if sort == 'h.id' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('evaluation_list', {sort: 'p.id', direction: (sort == 'p.id' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Project
+								{% if sort == 'p.id' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('evaluation_list', {sort: 'e.noteTech', direction: (sort == 'e.noteTech' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Tech Note
+								{% if sort == 'e.noteTech' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('evaluation_list', {sort: 'e.noteInnov', direction: (sort == 'e.noteInnov' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Innovation Note
+								{% if sort == 'e.noteInnov' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">
+							<a href="{{ path('evaluation_list', {sort: 'e.date', direction: (sort == 'e.date' and direction == 'asc') ? 'desc' : 'asc', search: search}) }}">
+								Date
+								{% if sort == 'e.date' %}
+									{{ direction == 'asc' ? '↑' : '↓' }}
+								{% endif %}
+							</a>
+						</th>
+						<th scope="col">Votes</th>
+						<th scope="col" class="text-center">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for evaluation in evaluations %}
+						<tr>
+							<th scope="row">{{ evaluation.id }}</th>
+							<td>
+								<span class="fw-semibold">{{ evaluation.idJury }}</span>
+							</td>
+							<td>{{ evaluation.idHackathon }}</td>
+							<td>{{ evaluation.idProjet }}</td>
+							<td>
+								<span class="badge bg-primary fs-6">{{ evaluation.noteTech }}</span>
+							</td>
+							<td>
+								<span class="badge bg-warning text-dark fs-6">{{ evaluation.noteInnov }}</span>
+							</td>
+							<td>{{ evaluation.date|date('Y-m-d') }}</td>
+							<td>
+								<ul class="list-group list-group-flush">
+									{% for vote in evaluation.getVotes() %}
+										<li class="list-group-item p-1">
+											<small>🆔
+												{{ vote.id }}
+												| 🗳️
+												{{ vote.valeurVote }}</small>
+										</li>
+									{% else %}
+										<li class="list-group-item p-1 text-muted fst-italic">No votes</li>
+									{% endfor %}
+								</ul>
+							</td>
+							<td class="text-center">
+								<a href="{{ path('evaluation_edit', {'id': evaluation.id}) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit">
+									✏️
+								</a>
+								<a href="{{ path('evaluation_delete', {'id': evaluation.id}) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this evaluation?')" title="Delete">
+									🗑️
+								</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="9" class="text-center text-muted">No evaluations found.</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="d-grid">
+			<a href="{{ path('evaluation_add') }}" class="btn btn-success btn-lg mt-4">
+				➕ Add New Evaluation
+			</a>
+		</div>
+	</div>
+{% endblock %}

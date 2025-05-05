@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chats{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Chats</h1>
+            <a href="{{ path('app_communaute_index') }}" class="btn btn-primary">
+                <i class="fas fa-users"></i> Back to Communities
+            </a>
+        </div>
+
+        <div class="row">
+            {% for chat in chats %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ chat.nom }}</h5>
+                            <p class="card-text">
+                                <strong>Type:</strong> {{ chat.type }}<br>
+                                <strong>Community:</strong> {{ chat.communaute_id.nom }}<br>
+                                <strong>Created:</strong> {{ chat.date_creation|date('Y-m-d H:i') }}
+                            </p>
+                            <a href="{{ path('app_chat_show', {'id': chat.id}) }}" class="btn btn-primary">Join Chat</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p>No chats found.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %} 

@@ -1,0 +1,79 @@
+{% extends 'backoffice/baseback.html.twig' %}
+
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                       
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                           {% if projets is empty %}
+    <p>Aucun Projets pour le moment.</p>
+  {% else %}
+    <p>Tous Les Projets.</p>
+
+                        </div>
+            <div class="card">
+                       
+                                            <div class="card-header">
+
+                                                <h3 class="card-title">All Projects</h3>
+                                    
+                                            </div>
+                                            
+              <!-- /.card-header -->
+                <div class="card-body p-0">
+                    <table class="table">
+                        <thead>
+                            <th>Nom</th>
+          <th>Statut</th>
+          <th>Priorite</th>
+          <th>Description</th>
+          <th>Ressource</th>
+          <th>action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        {% for projet in projets %}
+
+                            <tr>
+                             <td>{{ projet.nom }}</td>
+            <td>{{ projet.statut }}</td>
+            <td>{{ projet.priorite }}</td>
+            <td>{{ projet.description }}</td>
+            <td>{{ projet.ressource }}</td>
+              <td>
+<a href="{{ path('modifier_projet', { id: projet.id }) }}" class="btn bg-gradient-primary w-30 m-2 me-2">Update</a>
+
+              <form method="post" action="{{ path('supprimer_projet', {id: projet.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" class="w-50 m-2">
+        <input type="hidden" name="_token" value="{{ csrf_token('supprimer' ~ projet.id) }}">
+        <button class="btn bg-gradient-danger w-30">Delete</button>
+    </form>
+              </td>
+                            </tr>
+        {% endfor %}
+                        
+                        </tbody>
+                    </table>
+                </div>
+
+
+              <!-- /.card-body -->
+         </div>
+  {% endif %}
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

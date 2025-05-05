@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Participants - {{ hackathon.nom_hackathon }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+  <h2>Participants au hackathon : {{ hackathon.nom_hackathon }}</h2>
+
+  {% if participations is empty %}
+    <p>Aucun participant pour le moment.</p>
+  {% else %}
+    <ul class="nav nav-tabs d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
+      <li class="nav-item">
+        <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#en-attente">
+          <h4>En attente</h4>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#validé">
+          <h4>Validé</h4>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#refusé">
+          <h4>Refusé</h4>
+        </a>
+      </li>
+    </ul>
+
+    <div class="tab-content mt-4">
+      {% set statuts = ['En attente', 'validé', 'refusé'] %}
+      {% for statut in statuts %}
+        <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="{{ statut|lower|replace({' ': '-'}) }}">
+          <h3 class="text-center mb-3">Participations : {{ statut }}</h3>
+          
+          <div class="row">
+            {% set found = false %}
+            {% for participation in participations %}
+              {% if participation.statut == statut %}
+                {% set found = true %}
+                <div class="col-md-4 mb-4">
+                  <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                      <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto mb-3"
+                           style="width: 70px; height: 70px;">
+                        <i class="bi bi-person-fill text-white" style="font-size: 2.5rem;"></i>
+                      </div>
+                      <h5 class="card-title">{{ participation.participant.nomUser }} {{ participation.participant.prenomUser }}</h5>
+                      <p class="card-text">{{ participation.participant.emailUser }}</p>
+                      <p class="card-text"><small class="text-muted">Inscrit le {{ participation.date_inscription|date('d/m/Y H:i') }}</small></p>
+                      <p class="badge bg-primary">{{ participation.statut }}</p>
+                      <div class="mt-3">
+                        {% if participation.statut == 'En attente' %}
+                          <a href="{{ path('valider_participation', { id: participation.id_participation }) }}" class="btn btn-success btn-sm m-1">Valider</a>
+                          <a href="{{ path('refuser_participation', { id: participation.id_participation }) }}" class="btn btn-danger btn-sm m-1">Refuser</a>
+                        {% else %}
+                          <em>Aucune action disponible</em>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+            {% if not found %}
+              <div class="col-12 text-center">
+                <p>Aucune participation {{ statut|lower }}</p>
+              </div>
+            {% endif %}
+          </div>
+
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+

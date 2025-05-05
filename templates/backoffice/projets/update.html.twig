@@ -1,0 +1,109 @@
+{# Update Project Template #}
+{% extends 'backoffice/baseback.html.twig' %}
+
+{% block title %}Update Project{% endblock %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Modifier le Projet</h3>
+        </div>
+        <div class="card-body">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Update Project Information</h3>
+            </div>
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'autocomplete': 'off'}}) }}
+            <div class="card-body">
+              <div class="form-group">
+                {{ form_label(form.nom, 'Nom du Projet') }}
+                {{ form_widget(form.nom, {
+                  'attr': {
+                    'class': 'form-control' ~ (form.nom.vars.errors|length ? ' is-invalid'),
+                    'placeholder': 'Entrez le nom du projet'
+                  }
+                }) }}
+                {{ form_errors(form.nom) }}
+              </div>
+              <div class="form-group">
+                {{ form_label(form.statut, 'Statut') }}
+                {{ form_widget(form.statut, {
+                  'attr': {
+                    'class': 'form-control' ~ (form.statut.vars.errors|length ? ' is-invalid'),
+                    'placeholder': 'Statut'
+                  }
+                }) }}
+                {{ form_errors(form.statut) }}
+              </div>
+              <div class="form-group">
+                {{ form_label(form.priorite, 'Priorité') }}
+                {{ form_widget(form.priorite, {
+                  'attr': {
+                    'class': 'form-control' ~ (form.priorite.vars.errors|length ? ' is-invalid'),
+                    'placeholder': 'Priorité'
+                  }
+                }) }}
+                {{ form_errors(form.priorite) }}
+              </div>
+              <div class="form-group">
+                {{ form_label(form.description, 'Description') }}
+                {{ form_widget(form.description, {
+                  'attr': {
+                    'class': 'form-control' ~ (form.description.vars.errors|length ? ' is-invalid'),
+                    'placeholder': 'Description du projet'
+                  }
+                }) }}
+                {{ form_errors(form.description) }}
+              </div>
+              <div class="form-group">
+                {{ form_label(form.ressource, 'Ressource') }}
+                {{ form_widget(form.ressource, {
+                  'attr': {
+                    'class': 'form-control' ~ (form.ressource.vars.errors|length ? ' is-invalid'),
+                    'placeholder': 'Ressource'
+                  }
+                }) }}
+                {{ form_errors(form.ressource) }}
+              </div>
+              <div class="form-group">
+                {{ form_label(form.technologies, 'Technologies') }}
+                <div class="d-flex flex-column {% if form.technologies.vars.errors|length %} border border-danger rounded p-2{% endif %}">
+                  {% for tech in form.technologies %}
+                    <div class="form-check mb-1">
+                      {{ form_widget(tech, {
+                        'attr': {
+                          'class': 'form-check-input' ~ (tech.vars.errors|length ? ' is-invalid')
+                        }
+                      }) }}
+                      {{ form_label(tech, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                    </div>
+                  {% endfor %}
+                </div>
+                {{ form_errors(form.technologies) }}
+              </div>
+              <div class="form-group">
+                {{ form_label(form.id_hack, 'Hackathon') }}
+                {{ form_widget(form.id_hack, {
+                  'attr': {
+                    'class': 'form-control' ~ (form.id_hack.vars.errors|length ? ' is-invalid')
+                  }
+                }) }}
+                {{ form_errors(form.id_hack) }}
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

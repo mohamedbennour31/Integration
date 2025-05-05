@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.css' rel='stylesheet' />
+{% endblock %}
+
+{% block title %}Calendrier des Hackathons{% endblock %}
+
+{% block body %}
+<div class="container mt-4 mb-4">
+    <div class="section-title" data-aos="fade-up">
+        <h2>Calendrier des Hackathons</h2>
+        <p>Visualisez tous nos hackathons sur le calendrier</p>
+    </div>
+
+    <div id='calendar' style="min-height: 600px;"></div>
+</div>
+
+<style>
+.fc-view-harness {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.fc-daygrid-day {
+    background-color: white;
+}
+</style>
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/fr.global.min.js'></script>
+<script>
+window.onload = function() {
+    var calendarEl = document.getElementById('calendar');
+    if (!calendarEl) {
+        console.error('Calendar element not found!');
+        return;
+    }
+
+    try {
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth'
+            },
+            locale: 'fr',
+            timeZone: 'local',
+            height: 'auto',
+            aspectRatio: 1.8,
+            eventColor: '#1e0425',
+            eventTextColor: '#ffffff',
+            events: [
+                {% for hackathon in hackathons %}
+                {
+                    title: '{{ hackathon.nom_hackathon }}',
+                    start: '{{ hackathon.date_debut|date("Y-m-d\\TH:i:s") }}',
+                    end: '{{ hackathon.date_fin|date("Y-m-d\\TH:i:s") }}',
+                    url: '{{ path("hackathon_details", { id: hackathon.id_hackathon }) }}'
+                }{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ]
+        });
+        calendar.render();
+    } catch (error) {
+        console.error('Error initializing calendar:', error);
+    }
+};
+</script>
+{% endblock %}
