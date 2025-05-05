@@ -39,6 +39,16 @@ class Hackathon
         $this->id = $id_hackathon;
         return $this;
     }
+    public function getid_hackathon(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setid_hackathon(int $id_hackathon): self
+    {
+        $this->id = $id_hackathon;
+        return $this;
+    }
 
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "hackathons")]
@@ -364,6 +374,6 @@ class Hackathon
     }
     public function __toString(): string
     {
-        return (string) $this->getId    (); // Replace getName() with any property you want to show
+        return (string) $this->getId(); // Replace getName() with any property you want to show
     }
 }

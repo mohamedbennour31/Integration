@@ -46,16 +46,16 @@ class Participation
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "participations")]
     #[ORM\JoinColumn(name: 'id_participant', referencedColumnName: 'id')]
-    private ?User $id_participant = null;
+    private ?User $participant = null;
 
     public function getParticipant(): ?User
     {
-        return $this->id_participant;
+        return $this->participant;
     }
 
     public function setParticipant(?User $participant): self
     {
-        $this->id_participant = $participant;
+        $this->participant = $participant;
         return $this;
     }
 
